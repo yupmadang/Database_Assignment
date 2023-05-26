@@ -9,13 +9,13 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class GetItemRes {
-    private int itemIdx;
-    private int userIdx;
-    private int categoryIdx;
+    private long itemIdx;
+    private long userIdx;
+    private long categoryIdx;
     private String itemName;
     private int price;
     private String itemDescription;
-    private int like;
+    private int likeCount;
     private int viewed;
     private int chat;
     private int tradeType;

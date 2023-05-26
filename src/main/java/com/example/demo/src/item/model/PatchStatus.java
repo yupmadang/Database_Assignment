@@ -8,8 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 
-public class DeleteItemReq {
+public class PatchStatus {
+    private int status;
     private long itemIdx;
-
-    public DeleteItemReq(){}
 }

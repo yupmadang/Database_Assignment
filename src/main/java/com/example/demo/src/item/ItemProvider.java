@@ -28,6 +28,7 @@ public class ItemProvider {
             return getItemRes;
         }
         catch (Exception exception) {
+            System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
@@ -67,19 +68,19 @@ public class ItemProvider {
     }
 
     //상품삭제
-    public List<GetItemRes> deleteBoard(DeleteItemReq deleteBoardReq) throws BaseException{
+    public List<GetItemRes> deleteItem(DeleteItemReq deleteItemReq) throws BaseException{
         try{
-            List<GetItemRes> deleteBoardRes = itemDao.deleteItem(deleteBoardReq);
-            return deleteBoardRes;
+            List<GetItemRes> deleteItemRes = itemDao.deleteItem(deleteItemReq);
+            return deleteItemRes;
         }catch (Exception exception) {
             System.out.println(exception);
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public int modifyStatus(PatchItemReq patchItemReq) throws BaseException {
+    public int modifyStatus(PatchStatus patchStatus) throws BaseException {
         try{
-            int patchItemRes = itemDao.modifyStatus(patchItemReq);
+            int patchItemRes = itemDao.modifyStatus(patchStatus);
             return patchItemRes;
         }catch (Exception exception){
             System.out.println(exception);

@@ -40,7 +40,7 @@ public enum BaseResponseStatus {
     INVALID_ITEM_IDX(false, 2023, "상품번호가 일치하지 않습니다."),
     EMPTY_ITEM_IDX(false, 2024, "상품번호가 없습니다."),
     EMPTY_CATEGORY_IDX(false, 2025, "카테고리가 비어있습니다."),
-
+    INVALID_STATUS_TYPE(false, 2026, "판매상태가 유효하지 않습니다."),
 
 
 

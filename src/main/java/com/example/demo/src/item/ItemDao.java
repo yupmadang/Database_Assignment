@@ -61,7 +61,7 @@ public class ItemDao {
                         rs.getString("itemName"),
                         rs.getInt("price"),
                         rs.getString("itemDescription"),
-                        rs.getInt("like"),
+                        rs.getInt("likeCount"),
                         rs.getInt("viewed"),
                         rs.getInt("chat"),
                         rs.getInt("tradeType"),
@@ -87,7 +87,7 @@ public class ItemDao {
                 rs.getString("itemName"),
                 rs.getInt("price"),
                 rs.getString("itemDescription"),
-                rs.getInt("like"),
+                rs.getInt("likeCount"),
                 rs.getInt("viewed"),
                 rs.getInt("chat"),
                 rs.getInt("tradeType"),
@@ -99,10 +99,10 @@ public class ItemDao {
 
     // 상품등록
     public List<PostItemRes> postItem(PostItemReq postItemReq) {
-        String postItemQuery = "INSERT INTO Item (itemIdx, userIdx, categoryIdx, itemName, price, itemDescription, `like`, viewed, chat, tradeType, initDate, editDate, status)" +
+        String postItemQuery = "INSERT INTO Item (itemIdx, userIdx, categoryIdx, itemName, price, itemDescription, likeCount, viewed, chat, tradeType, initDate, editDate, status)" +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,?);";
         Object[] postItemParam = new Object[]{postItemReq.getItemIdx(), postItemReq.getUserIdx(), postItemReq.getCategoryIdx(),postItemReq.getItemName(),
-                postItemReq.getPrice(), postItemReq.getItemDescription(), postItemReq.getLike(), postItemReq.getViewed(), postItemReq.getChat(), postItemReq.getTradeType(),
+                postItemReq.getPrice(), postItemReq.getItemDescription(), postItemReq.getLikeCount(), postItemReq.getViewed(), postItemReq.getChat(), postItemReq.getTradeType(),
                 postItemReq.getStatus()};
 
         this.jdbcTemplate.update(postItemQuery, postItemParam);
@@ -116,7 +116,7 @@ public class ItemDao {
                 rs.getString("itemName"),
                 rs.getInt("price"),
                 rs.getString("itemDescription"),
-                rs.getInt("like"),
+                rs.getInt("likeCount"),
                 rs.getInt("viewed"),
                 rs.getInt("chat"),
                 rs.getInt("tradeType"),
@@ -128,11 +128,11 @@ public class ItemDao {
     // 상품수정
     public GetItemRes patchItem(PatchItemReq patchItemReq){
         String updateQuery = "UPDATE Item set itemName = ? ,price = ? ,itemDescription = ?  " +
-                ",tradeType = ?, editDate = CURRENT_TIMESTAMP  where itemIdx = ?" ;
+                    ",tradeType = ?, editDate = CURRENT_TIMESTAMP, categoryIdx = ?  where itemIdx = ?" ;
 
         Object[] updateParams = new Object[]{
                 patchItemReq.getItemName(), patchItemReq.getPrice(), patchItemReq.getItemDescription(),
-                patchItemReq.getTradeType()
+                patchItemReq.getTradeType(),patchItemReq.getCategoryIdx(), patchItemReq.getItemIdx()
         };
 
         this.jdbcTemplate.update(updateQuery, updateParams);
@@ -149,7 +149,7 @@ public class ItemDao {
                 rs.getString("itemName"),
                 rs.getInt("price"),
                 rs.getString("itemDescription"),
-                rs.getInt("like"),
+                rs.getInt("likeCount"),
                 rs.getInt("viewed"),
                 rs.getInt("chat"),
                 rs.getInt("tradeType"),
@@ -160,19 +160,19 @@ public class ItemDao {
     }
 
     // 상품상태 변경
-    public int modifyStatus(PatchItemReq patchItemReq) {
+    public int modifyStatus(PatchStatus patchStatus) {
         String modifyStatusQuery = "update Item set status = ? where itemIdx = ? ";
-        Object[] modifyStatusParams = new Object[]{patchItemReq.getStatus(),patchItemReq.getItemIdx()};
+        Object[] modifyStatusParams = new Object[]{patchStatus.getStatus(),patchStatus.getItemIdx()};
 
         return this.jdbcTemplate.update(modifyStatusQuery, modifyStatusParams);
     }
 
     //상품 삭제
     public List<GetItemRes> deleteItem(DeleteItemReq deleteItemReq){
-        String deleteBoardQuery = "DELETE from Item where itemIdx = ? and userIdx = ?" ;
+        String deleteBoardQuery = "DELETE from Item where itemIdx = ?" ;
 
         Object[] deleteParam = new Object[]{
-                deleteItemReq.getItemIdx(), deleteItemReq.getUserIdx()
+                deleteItemReq.getItemIdx()
         };
         this.jdbcTemplate.update(deleteBoardQuery, deleteParam);
         return null;

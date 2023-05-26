@@ -33,12 +33,31 @@ public class ItemController {
     //Query String
     @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED, isolation = READ_COMMITTED , rollbackFor = Exception.class)
-    @GetMapping("/item/total") // (GET) 127.0.0.1:9000/item
-    public BaseResponse<List<GetItemRes>> getBoard() {
+    @GetMapping("/item/total") // (GET) 127.0.0.1:9000/item/total
+    public BaseResponse<List<GetItemRes>> getItem() {
         try{
             List<GetItemRes> getBoardRes = itemProvider.getItem();
             return new BaseResponse<>(getBoardRes);
         } catch(BaseException exception){
+            System.out.println(exception);
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * [GET] /item/total
+     *  상품조회 API
+     */
+    //Query String
+    @ResponseBody
+    @Transactional(propagation = Propagation.REQUIRED, isolation = READ_COMMITTED , rollbackFor = Exception.class)
+    @GetMapping("/item/{item_idx}") // (GET) 127.0.0.1:9000/item/total
+    public BaseResponse<List<GetItemRes>> getItemOne(@PathVariable("item_idx") int item_idx) {
+        try{
+            List<GetItemRes> getBoardRes = itemProvider.getOneItem(item_idx);
+            return new BaseResponse<>(getBoardRes);
+        } catch(BaseException exception){
+            System.out.println(exception);
             return new BaseResponse<>((exception.getStatus()));
         }
     }
@@ -77,10 +96,9 @@ public class ItemController {
     @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED, isolation = READ_COMMITTED , rollbackFor = Exception.class)
     @PatchMapping("/item/modify/{item_idx}")
-    public BaseResponse<String> patchBoard(@PathVariable("item_idx") int item_idx,
+    public BaseResponse<String> patchItem(@PathVariable("item_idx") int item_idx,
                                            @RequestBody PatchItemReq patchItemReq) {
         try{
-
             if(item_idx != patchItemReq.getItemIdx()){
                 return new BaseResponse<>(BaseResponseStatus.INVALID_ITEM_IDX);
             } else if(item_idx== 0){
@@ -107,7 +125,7 @@ public class ItemController {
     @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED, isolation = READ_COMMITTED , rollbackFor = Exception.class)
     @DeleteMapping("/item/delete/{item_idx}")
-    public BaseResponse<String> deleteBoard(@PathVariable("item_idx") int item_idx,
+    public BaseResponse<String> deleteItem(@PathVariable("item_idx") int item_idx,
                                             @RequestBody DeleteItemReq deleteItemReq){
         try{
             if(item_idx != deleteItemReq.getItemIdx()){
@@ -116,7 +134,9 @@ public class ItemController {
             else if(item_idx == 0){
                 return new BaseResponse<>(BaseResponseStatus.EMPTY_ITEM_IDX);
             }
-            itemProvider.deleteBoard(deleteItemReq);
+            itemProvider.deleteItem(deleteItemReq);
+
+
 
             String result = "삭제에 성공하였습니다.";
             return new BaseResponse<>(result);
@@ -126,6 +146,31 @@ public class ItemController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    //게시글 상태수정
+    @ResponseBody
+    @Transactional(propagation = Propagation.REQUIRED, isolation = READ_COMMITTED , rollbackFor = Exception.class)
+    @PatchMapping("/item/modify/status/{item_idx}")
+    public BaseResponse<String> patchStatus(@PathVariable("item_idx") int item_idx,
+                                          @RequestBody PatchStatus patchStatus) {
+        try{
+            if(item_idx != patchStatus.getItemIdx()){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_ITEM_IDX);
+            } else if(item_idx== 0 || patchStatus.getItemIdx() == 0){
+                return new BaseResponse<>(BaseResponseStatus.EMPTY_ITEM_IDX);
+            } else if (patchStatus.getStatus() != 0 && patchStatus.getStatus() != 1){
+                return new BaseResponse<>(BaseResponseStatus.INVALID_STATUS_TYPE);
+            }
+            itemProvider.modifyStatus(patchStatus);
+            String result = "판매상태정보가 수정되었습니다";
+            return new BaseResponse<>(result);
+
+        } catch(BaseException exception){
+            System.out.println(exception);
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
 }
 

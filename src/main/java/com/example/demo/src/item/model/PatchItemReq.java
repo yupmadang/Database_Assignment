@@ -9,13 +9,12 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class PatchItemReq {
-    private int itemIdx;
-    private int categoryIdx;
+
+    private long itemIdx;
+    private long categoryIdx;
     private String itemName;
     private int price;
     private String itemDescription;
     private int tradeType;
-    private String initDate;
     private String editDate;
-    private int status;
 }
