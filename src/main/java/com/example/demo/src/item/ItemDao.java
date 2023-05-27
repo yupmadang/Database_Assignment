@@ -168,13 +168,10 @@ public class ItemDao {
     }
 
     //상품 삭제
-    public List<GetItemRes> deleteItem(DeleteItemReq deleteItemReq){
+    public List<GetItemRes> deleteItem(int item_idx){
         String deleteBoardQuery = "DELETE from Item where itemIdx = ?" ;
 
-        Object[] deleteParam = new Object[]{
-                deleteItemReq.getItemIdx()
-        };
-        this.jdbcTemplate.update(deleteBoardQuery, deleteParam);
+        this.jdbcTemplate.update(deleteBoardQuery, item_idx);
         return null;
     }
 

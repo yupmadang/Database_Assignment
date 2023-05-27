@@ -125,16 +125,12 @@ public class ItemController {
     @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED, isolation = READ_COMMITTED , rollbackFor = Exception.class)
     @DeleteMapping("/item/delete/{item_idx}")
-    public BaseResponse<String> deleteItem(@PathVariable("item_idx") int item_idx,
-                                            @RequestBody DeleteItemReq deleteItemReq){
+    public BaseResponse<String> deleteItem(@PathVariable("item_idx") int item_idx){
         try{
-            if(item_idx != deleteItemReq.getItemIdx()){
-                return new BaseResponse<>(BaseResponseStatus.INVALID_ITEM_IDX);
-            }
-            else if(item_idx == 0){
+            if(item_idx == 0){
                 return new BaseResponse<>(BaseResponseStatus.EMPTY_ITEM_IDX);
             }
-            itemProvider.deleteItem(deleteItemReq);
+            itemProvider.deleteItem(item_idx);
 
 
 
