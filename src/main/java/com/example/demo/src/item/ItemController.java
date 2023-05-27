@@ -124,16 +124,18 @@ public class ItemController {
     //게시물 삭제
     @ResponseBody
     @Transactional(propagation = Propagation.REQUIRED, isolation = READ_COMMITTED , rollbackFor = Exception.class)
-    @DeleteMapping("/item/delete/{item_idx}")
-    public BaseResponse<String> deleteItem(@PathVariable("item_idx") int item_idx){
+    @DeleteMapping("/item/delete/{item_idx}/{user_idx}")
+    public BaseResponse<String> deleteItem(@PathVariable("item_idx") int item_idx, @PathVariable("user_idx") int user_idx){
         try{
             if(item_idx == 0){
                 return new BaseResponse<>(BaseResponseStatus.EMPTY_ITEM_IDX);
             }
-            itemProvider.deleteItem(item_idx);
+            else if(user_idx == 0){
+                return new BaseResponse<>(BaseResponseStatus.USERS_EMPTY_USER_IDX);
+            }
 
 
-
+            itemProvider.deleteItem(item_idx, user_idx);
             String result = "삭제에 성공하였습니다.";
             return new BaseResponse<>(result);
 

@@ -68,9 +68,9 @@ public class ItemProvider {
     }
 
     //상품삭제
-    public List<GetItemRes> deleteItem(int item_idx) throws BaseException{
+    public List<GetItemRes> deleteItem(int item_idx, int user_idx) throws BaseException{
         try{
-            List<GetItemRes> deleteItemRes = itemDao.deleteItem(item_idx);
+            List<GetItemRes> deleteItemRes = itemDao.deleteItem(item_idx, user_idx);
             return deleteItemRes;
         }catch (Exception exception) {
             System.out.println(exception);
